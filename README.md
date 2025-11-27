@@ -26,8 +26,8 @@ An intelligent, autonomous agent built with LangGraph and LangChain that solves 
 - [Configuration](#configuration)
 - [Usage](#usage)
 - [API Endpoints](#api-endpoints)
-- [Tools &amp; Capabilities](#tools--capabilities)
-- [Docker Deployment](#docker-deployment)
+- [Tools & Capabilities](#tools--capabilities)
+- [Deployment](#deployment)
 - [How It Works](#how-it-works)
 - [License](#license)
 
@@ -111,8 +111,8 @@ LLM-Analysis-TDS-Project-2/
 ### Step 1: Clone the Repository
 
 ```bash
-git clone https://github.com/saivijayragav/LLM-Analysis-TDS-Project-2.git
-cd LLM-Analysis-TDS-Project-2
+git clone https://github.com/23f2003886/TDS-PROJECT-2.git
+cd TDS-PROJECT-2
 ```
 
 ### Step 2: Install Dependencies
@@ -282,33 +282,94 @@ The agent has access to the following tools:
 - Uses `uv add` for fast package resolution
 - Enables the agent to adapt to different task requirements
 
-## 🐳 Docker Deployment
-
-### Build the Image
-
-```bash
-docker build -t llm-analysis-agent .
-```
-
-### Run the Container
-
-```bash
-docker run -p 7860:7860 \
-  -e EMAIL="your.email@example.com" \
-  -e SECRET="your_secret_string" \
-  -e GOOGLE_API_KEY="your_api_key" \
-  llm-analysis-agent
-```
+## 🚀 Deployment
 
 ### Deploy to HuggingFace Spaces
 
-1. Create a new Space with Docker SDK
-2. Push this repository to your Space
-3. Add secrets in Space settings:
-   - `EMAIL`
-   - `SECRET`
-   - `GOOGLE_API_KEY`
-4. The Space will automatically build and deploy
+This project is designed to run on HuggingFace Spaces with Docker SDK.
+
+#### Step 1: Create a HuggingFace Space
+
+1. Go to [HuggingFace Spaces](https://huggingface.co/spaces)
+2. Click **"Create new Space"**
+3. Fill in the details:
+   - **Space name**: `llm-analysis-quiz-solver` (or your preferred name)
+   - **License**: MIT
+   - **Select SDK**: Docker
+   - **Space hardware**: CPU basic (free tier works fine)
+4. Click **"Create Space"**
+
+#### Step 2: Add Secrets
+
+In your Space settings, add the following secrets:
+
+1. Go to **Settings** → **Repository secrets**
+2. Add these secrets:
+   - `EMAIL`: Your email from Google Form submission
+   - `SECRET`: Your secret string from Google Form submission
+   - `GOOGLE_API_KEY`: Your Gemini API key
+
+#### Step 3: Push Your Code
+
+```bash
+# Initialize git if not already done
+git init
+
+# Add all files
+git add .
+
+# Commit
+git commit -m "Initial commit: LLM Analysis Quiz Solver"
+
+# Add HuggingFace Space as remote
+git remote add space https://huggingface.co/spaces/YOUR_USERNAME/YOUR_SPACE_NAME
+
+# Push to HuggingFace
+git push --force space main
+```
+
+#### Step 4: Wait for Build
+
+- HuggingFace will automatically build your Docker container
+- This may take 5-10 minutes
+- Monitor the build logs in the "Build" tab
+- Once complete, your Space will be live at: `https://huggingface.co/spaces/YOUR_USERNAME/YOUR_SPACE_NAME`
+
+#### Step 5: Test Your Deployment
+
+```bash
+curl -X POST https://YOUR_USERNAME-YOUR_SPACE_NAME.hf.space/solve \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "your.email@example.com",
+    "secret": "your_secret_string",
+    "url": "https://tds-llm-analysis.s-anand.net/demo"
+  }'
+```
+
+#### Updating Your Space
+
+To update your deployed Space:
+
+```bash
+git add .
+git commit -m "Update: description of changes"
+git push space main
+```
+
+### Alternative: Push to GitHub First
+
+If you want to maintain the code on GitHub and HuggingFace:
+
+```bash
+# Push to GitHub
+git remote add origin https://github.com/23f2003886/TDS-PROJECT-2.git
+git push -u origin main
+
+# Also push to HuggingFace Space
+git remote add space https://huggingface.co/spaces/YOUR_USERNAME/YOUR_SPACE_NAME
+git push space main
+```
 
 ## 🧠 How It Works
 
@@ -386,4 +447,4 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 **Course**: Tools in Data Science (TDS)
 **Institution**: IIT Madras
 
-For questions or issues, please open an issue on the [GitHub repository](https://github.com/saivijayragav/LLM-Analysis-TDS-Project-2).
+For questions or issues, please open an issue on the [GitHub repository](https://github.com/23f2003886/TDS-PROJECT-2).
