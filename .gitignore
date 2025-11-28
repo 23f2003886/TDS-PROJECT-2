@@ -1,38 +1,12 @@
 # Python-generated files
 __pycache__/
 *.py[oc]
-*.pyc
 build/
 dist/
 wheels/
 *.egg-info
-
-# Environment variables (IMPORTANT - contains secrets!)
 .env
-
 # Virtual environments
-venv/
-.venv/
-ENV/
-env/
-
-# Project-specific generated files
-tests/
-LLMFiles/
-runner.py
-
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-
-# OS
-.DS_Store
-Thumbs.db
-
-# Logs
-*.log
-
-# uv
-uv.lock
+.venv
+tests
+LLMFiles
