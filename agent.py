@@ -4,7 +4,7 @@ import time
 from langchain_core.rate_limiters import InMemoryRateLimiter
 from langgraph.prebuilt import ToolNode
 from tools import (
-    get_rendered_html, download_file, post_request,
+    get_rendered_html, download_file, submit_answer,
     run_code, add_dependencies, ocr_image_tool, transcribe_audio, encode_image_to_base64
 )
 from typing import TypedDict, Annotated, List
@@ -31,7 +31,7 @@ class AgentState(TypedDict):
 
 TOOLS = [
     run_code, get_rendered_html, download_file,
-    post_request, add_dependencies, ocr_image_tool, transcribe_audio, encode_image_to_base64
+    submit_answer, add_dependencies, ocr_image_tool, transcribe_audio, encode_image_to_base64
 ]
 
 
@@ -58,14 +58,19 @@ SYSTEM_PROMPT = f"""
 You are an autonomous quiz-solving agent.
 
 Your job is to:
-1. Load each quiz page from the given URL.
+1. Load each quiz page from the given URL using get_rendered_html.
 2. Extract instructions, parameters, and submit endpoint.
 3. Solve tasks exactly.
-4. Submit answers ONLY to the correct endpoint.
-5. Follow new URLs until none remain, then output END.
+4. Submit answers using the submit_answer tool (NOT run_code with requests).
+5. Check the response: if "correct" is True and there's a "next_url", continue to that URL.
+6. Follow new URLs until none remain, then output END.
 
 Rules:
-- For base64 generation of an image NEVER use your own code, always use the "encode_image_to_base64" tool that's provided
+- For base64 generation of an image NEVER use your own code, always use the "encode_image_to_base64" tool.
+- ALWAYS use submit_answer tool to submit quiz answers, never use run_code with requests.post.
+- The submit_answer tool returns {{"correct": bool, "next_url": str|None, "reason": str}}.
+- If correct=True and next_url exists, proceed to that URL.
+- If correct=True and no next_url, output END.
 - Never hallucinate URLs or fields.
 - Never shorten endpoints.
 - Always inspect server response.
