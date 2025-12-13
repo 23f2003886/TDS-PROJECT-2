@@ -16,7 +16,6 @@ tags:
   - gemini
 suggested_hardware: cpu-basic
 ---
-
 # 🤖 Autonomous Quiz Solver Agent
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -36,7 +35,7 @@ An intelligent, autonomous agent built with **LangGraph** and **LangChain** that
 - [Configuration](#configuration)
 - [Usage](#usage)
 - [API Endpoints](#api-endpoints)
-- [Tools & Capabilities](#tools--capabilities)
+- [Tools &amp; Capabilities](#tools--capabilities)
 - [Deployment](#deployment)
 - [How It Works](#how-it-works)
 - [License](#license)
@@ -179,18 +178,17 @@ Create a `.env` file in the project root:
 
 ```env
 # Your credentials from the Google Form submission
-EMAIL=your.email@example.com
-SECRET=your_secret_string
+EMAIL=your_email
+SECRET=your_secret
 
-# Google Gemini API Key
-GOOGLE_API_KEY=your_gemini_api_key_here
+# AI Pipe API Key 
+AIPIPE_KEY=your_aipipe_key
 ```
 
-### Getting a Gemini API Key
+### Getting an AIPIPE Key
 
-1. Visit [Google AI Studio](https://aistudio.google.com/app/apikey)
-2. Create a new API key
-3. Copy it to your `.env` file
+1. Get your AIPIPE key from the TDS course portal or your instructor
+2. Copy it to your `.env` file
 
 ## 🚀 Usage
 
@@ -274,41 +272,49 @@ Health check endpoint for monitoring.
 The agent has access to the following tools:
 
 ### 1. **Web Scraper** (`get_rendered_html`)
+
 - Uses Playwright to render JavaScript-heavy pages
 - Waits for network idle before extracting content
 - Returns fully rendered HTML for parsing
 
 ### 2. **File Downloader** (`download_file`)
+
 - Downloads files (PDFs, CSVs, images, audio, etc.) from direct URLs
 - Saves files to `LLMFiles/` directory
 - Returns the saved filename
 
 ### 3. **Code Executor** (`run_code`)
+
 - Executes arbitrary Python code in an isolated subprocess
 - Returns stdout, stderr, and exit code
 - Useful for data processing, analysis, and visualization
 
 ### 4. **Answer Submitter** (`submit_answer`)
+
 - Submits JSON payloads to quiz submission endpoints
 - Parses response for correctness and next URL
 - Handles retry logic within time limits
 
 ### 5. **Dependency Installer** (`add_dependencies`)
+
 - Dynamically installs Python packages as needed
 - Uses `uv add` for fast package resolution
 - Enables the agent to adapt to different task requirements
 
 ### 6. **Audio Transcription** (`transcribe_audio`)
+
 - Transcribes MP3/WAV audio files to text
 - Supports Google Speech Recognition API
 - Auto-converts MP3 to WAV using pydub/FFmpeg
 
 ### 7. **OCR / Image Text Extraction** (`ocr_image_tool`)
+
 - Extracts text from images using Tesseract OCR
 - Supports base64, file path, or PIL.Image input
 - Configurable language support
 
 ### 8. **Image Encoder** (`encode_image_to_base64`)
+
 - Encodes images to base64 for API payloads
 - Used for vision model inputs
 
@@ -337,7 +343,7 @@ In your Space settings, add the following secrets:
 2. Add these secrets:
    - `EMAIL`: Your email from Google Form submission
    - `SECRET`: Your secret string from Google Form submission
-   - `GOOGLE_API_KEY`: Your Gemini API key
+   - `AIPIPE_KEY`: Your AIPIPE API key
 
 #### Step 3: Push Your Code
 
@@ -470,17 +476,17 @@ The agent follows this loop:
 
 ## 🔧 Tech Stack
 
-| Component | Technology |
-|-----------|------------|
-| **LLM** | Google Gemini 2.5 Flash |
-| **Orchestration** | LangGraph + LangChain |
-| **Web Framework** | FastAPI + Uvicorn |
-| **Web Scraping** | Playwright (Chromium) |
-| **OCR** | Tesseract |
-| **Audio** | FFmpeg, pydub, SpeechRecognition |
-| **Package Manager** | uv |
-| **Containerization** | Docker |
-| **Deployment** | HuggingFace Spaces |
+| Component                  | Technology                       |
+| -------------------------- | -------------------------------- |
+| **LLM**              | Google Gemini 2.5 Flash          |
+| **Orchestration**    | LangGraph + LangChain            |
+| **Web Framework**    | FastAPI + Uvicorn                |
+| **Web Scraping**     | Playwright (Chromium)            |
+| **OCR**              | Tesseract                        |
+| **Audio**            | FFmpeg, pydub, SpeechRecognition |
+| **Package Manager**  | uv                               |
+| **Containerization** | Docker                           |
+| **Deployment**       | HuggingFace Spaces               |
 
 ## 📄 License
 
