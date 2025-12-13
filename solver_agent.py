@@ -1,6 +1,7 @@
 from tools import (
     get_rendered_html, download_file,
-    run_code, add_dependencies, submit_answer
+    run_code, add_dependencies, submit_answer,
+    transcribe_audio, ocr_image_tool, encode_image_to_base64
 )
 from llm import OpenRouterLLM
 import json
@@ -102,7 +103,10 @@ FUNCTION_MAP = {
     "run_code": run_code,
     "download_file": download_file,
     "add_dependencies": add_dependencies,
-	"submit_answer": submit_answer
+    "submit_answer": submit_answer,
+    "transcribe_audio": transcribe_audio,
+    "ocr_image_tool": ocr_image_tool,
+    "encode_image_to_base64": encode_image_to_base64
 }
 
 TOOLS_SCHEMA = [
@@ -185,6 +189,62 @@ TOOLS_SCHEMA = [
                 }
             },
             "required": ["submission_url", "payload"]
+        }
+    }
+},
+{
+    "type": "function",
+    "function": {
+        "name": "transcribe_audio",
+        "description": "Transcribe an audio file (MP3, WAV, OPUS, etc.) into text. Use this for any audio transcription task.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "file_path": {
+                    "type": "string",
+                    "description": "Path to the audio file (relative to LLMFiles directory). Example: 'audio.mp3'"
+                }
+            },
+            "required": ["file_path"]
+        }
+    }
+},
+{
+    "type": "function",
+    "function": {
+        "name": "ocr_image_tool",
+        "description": "Extract text from an image using OCR (Tesseract). Use this for reading text from images.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "payload": {
+                    "type": "object",
+                    "description": "Object with 'image' key containing file path, base64 string, or image data",
+                    "properties": {
+                        "image": { "type": "string", "description": "Image file path (relative to LLMFiles) or base64 string" },
+                        "lang": { "type": "string", "description": "OCR language code, default 'eng'" }
+                    },
+                    "required": ["image"]
+                }
+            },
+            "required": ["payload"]
+        }
+    }
+},
+{
+    "type": "function",
+    "function": {
+        "name": "encode_image_to_base64",
+        "description": "Encode an image file to base64 string. Use this when you need to send image data in API requests.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "image_path": {
+                    "type": "string",
+                    "description": "Path to the image file to encode"
+                }
+            },
+            "required": ["image_path"]
         }
     }
 }
